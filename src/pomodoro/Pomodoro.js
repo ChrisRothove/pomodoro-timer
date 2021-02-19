@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import classNames from "../utils/class-names";
 import { minutesToDuration } from "../utils/duration";
 import useInterval from "../utils/useInterval";
+import FocusButtons from "./components/FocusButtons";
+import BreakButtons from "./components/BreakButtons";
 
 function Pomodoro() {
   const initialTimerState = {
@@ -64,53 +66,23 @@ function Pomodoro() {
             <span className="input-group-text" data-testid="duration-focus">
               Focus Duration: {minutesToDuration(timers.focus)}
             </span>
-            <div className="input-group-append">
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-testid="decrease-focus"
-                onClick={reduceFocus}
-              >
-                <span className="oi oi-minus" />
-              </button>
-              <button
-                type="button"
-                className="btn btn-secondary"
-                data-testid="increase-focus"
-                onClick={increaseFocus}
-              >
-                <span className="oi oi-plus" />
-              </button>
-            </div>
+            {/*Component for the focus and break selectors*/}
+            <FocusButtons
+              reduceFocus={reduceFocus}
+              increaseFocus={increaseFocus}
+            />
           </div>
         </div>
         <div className="col">
           <div className="float-right">
             <div className="input-group input-group-lg mb-2">
               <span className="input-group-text" data-testid="duration-break">
-                {/* TODO: Update this text to display the current break session duration */}
                 Break Duration: {minutesToDuration(timers.break)}
               </span>
-              <div className="input-group-append">
-                {/* TODO: Implement decreasing break duration and disable during a focus or break session*/}
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-testid="decrease-break"
-                  onClick={reduceBreak}
-                >
-                  <span className="oi oi-minus" />
-                </button>
-                {/* TODO: Implement increasing break duration and disable during a focus or break session*/}
-                <button
-                  type="button"
-                  className="btn btn-secondary"
-                  data-testid="increase-break"
-                  onClick={increaseBreak}
-                >
-                  <span className="oi oi-plus" />
-                </button>
-              </div>
+              <BreakButtons
+                increaseBreak={increaseBreak}
+                reduceBreak={reduceBreak}
+              />
             </div>
           </div>
         </div>
