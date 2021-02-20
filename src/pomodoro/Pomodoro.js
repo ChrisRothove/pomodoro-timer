@@ -4,6 +4,12 @@ import { minutesToDuration } from "../utils/duration";
 import useInterval from "../utils/useInterval";
 import FocusButtons from "./components/FocusButtons";
 import BreakButtons from "./components/BreakButtons";
+import {
+  increaseBreak,
+  reduceBreak,
+  increaseFocus,
+  reduceFocus,
+} from "../utils/increase-and-reduce";
 
 function Pomodoro() {
   const initialTimerState = {
@@ -22,42 +28,6 @@ function Pomodoro() {
     setIsTimerRunning((prevState) => !prevState);
   }
 
-  function reduceFocus() {
-    let newFocus = timers.focus - 5;
-    if (newFocus < 0) newFocus = 0;
-    setTimers({
-      ...timers,
-      focus: newFocus,
-    });
-  }
-
-  function increaseFocus() {
-    let newFocus = timers.focus + 5;
-    if (newFocus >= 60) newFocus = 60;
-    setTimers({
-      ...timers,
-      focus: newFocus,
-    });
-  }
-
-  function reduceBreak() {
-    let newBreak = timers.break - 5;
-    if (newBreak < 0) newBreak = 0;
-    setTimers({
-      ...timers,
-      break: newBreak,
-    });
-  }
-
-  function increaseBreak() {
-    let newBreak = timers.break + 5;
-    if (newBreak >= 15) newBreak = 15;
-    setTimers({
-      ...timers,
-      break: newBreak,
-    });
-  }
-
   return (
     <div className="pomodoro">
       <div className="row">
@@ -68,8 +38,8 @@ function Pomodoro() {
             </span>
             {/*Component for the focus and break selectors*/}
             <FocusButtons
-              reduceFocus={reduceFocus}
-              increaseFocus={increaseFocus}
+              reduceFocus={() => reduceFocus(timers, setTimers)}
+              increaseFocus={() => increaseFocus(timers, setTimers)}
             />
           </div>
         </div>
