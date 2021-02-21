@@ -2,8 +2,8 @@ import React from "react";
 import { minutesToDuration, secondsToDuration } from "../../utils/duration";
 import DurationHeader from "../components/DurationHeader";
 
-function TimerDisplay({ timers, isTimerRunning }) {
-  if (isTimerRunning) {
+function TimerDisplay({ timers }) {
+  if (!timers.isStopped) {
     return (
       <div>
         <div className="row mb-2">
@@ -25,8 +25,8 @@ function TimerDisplay({ timers, isTimerRunning }) {
                 role="progressbar"
                 aria-valuemin="0"
                 aria-valuemax="100"
-                aria-valuenow="0" // TODO: Increase aria-valuenow as elapsed time increases
-                style={{ width: "0%" }} // TODO: Increase width % as elapsed time increases
+                aria-valuenow={timers.ariaPercentage}
+                style={{ width: `${timers.ariaPercentage}%` }}
               />
             </div>
           </div>
@@ -34,7 +34,7 @@ function TimerDisplay({ timers, isTimerRunning }) {
       </div>
     );
   } else {
-    return <></>;
+    return <div></div>;
   }
 }
 

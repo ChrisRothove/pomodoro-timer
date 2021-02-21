@@ -4,7 +4,7 @@ function DurationHeader({ timers, minutesToDuration }) {
   if (timers.onBreak) {
     return (
       <h2 data-testid="session-title">
-        On break for {minutesToDuration(timers.break)} minutes
+        On Break for {minutesToDuration(timers.break)} minutes
       </h2>
     );
   } else {

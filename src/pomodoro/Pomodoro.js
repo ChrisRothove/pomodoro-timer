@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import classNames from "../utils/class-names";
-import { minutesToDuration, secondsToDuration } from "../utils/duration";
+import { minutesToDuration } from "../utils/duration";
 import useInterval from "../utils/useInterval";
+import ariaPercentage from "../utils/aria-percentage";
 import FocusButtons from "./components/FocusButtons";
 import BreakButtons from "./components/BreakButtons";
 import TimerDisplay from "./components/TimerDisplay";
@@ -17,7 +18,9 @@ function Pomodoro() {
     focus: 25,
     break: 5,
     current: 1500,
+    ariaPercentage: 0,
     onBreak: false,
+    isStopped: true,
   };
 
   // Timer starts out paused
@@ -26,15 +29,38 @@ function Pomodoro() {
 
   useInterval(
     () => {
-      setTimers({ ...timers, current: timers.current - 1 });
-      console.log(`current time: ${timers.current - 1}`);
-      if (timers.current <= 1) setIsTimerRunning(false);
+      setTimers({
+        ...timers,
+        current: timers.current - 1,
+        ariaPercentage: ariaPercentage(timers),
+      });
+      if (timers.current <= 1) {
+        setTimers({
+          ...timers,
+          current: timers.break * 60,
+          onBreak: !timers.onBreak,
+        });
+      }
     },
     isTimerRunning ? 1000 : null
   );
 
+  function startFresh() {
+    setTimers({
+      ...initialTimerState,
+      isStopped: true,
+    });
+    setIsTimerRunning(false);
+  }
+
   function playPause() {
     setIsTimerRunning((prevState) => !prevState);
+    if (timers.isStopped) {
+      setTimers({
+        ...timers,
+        isStopped: false,
+      });
+    }
   }
 
   return (
@@ -88,18 +114,18 @@ function Pomodoro() {
                 })}
               />
             </button>
-            {/* TODO: Implement stopping the current focus or break session and disable when there is no active session */}
             <button
               type="button"
               className="btn btn-secondary"
               title="Stop the session"
+              onClick={startFresh}
             >
               <span className="oi oi-media-stop" />
             </button>
           </div>
         </div>
       </div>
-      <TimerDisplay timers={timers} isTimerRunning={isTimerRunning} />
+      <TimerDisplay timers={timers} />
     </div>
   );
 }

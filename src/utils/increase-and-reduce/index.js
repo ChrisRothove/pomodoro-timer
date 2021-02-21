@@ -1,6 +1,6 @@
 function reduceFocus(timers, setTimers) {
   let newFocus = timers.focus - 5;
-  if (newFocus < 0) newFocus = 0;
+  if (newFocus < 5) newFocus = 5;
   setTimers({
     ...timers,
     focus: newFocus,
@@ -19,8 +19,8 @@ function increaseFocus(timers, setTimers) {
 }
 
 function reduceBreak(timers, setTimers) {
-  let newBreak = timers.break - 5;
-  if (newBreak < 0) newBreak = 0;
+  let newBreak = timers.break - 1;
+  if (newBreak < 1) newBreak = 1;
   setTimers({
     ...timers,
     break: newBreak,
@@ -28,7 +28,7 @@ function reduceBreak(timers, setTimers) {
 }
 
 function increaseBreak(timers, setTimers) {
-  let newBreak = timers.break + 5;
+  let newBreak = timers.break + 1;
   if (newBreak >= 15) newBreak = 15;
   setTimers({
     ...timers,
