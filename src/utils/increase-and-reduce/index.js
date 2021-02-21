@@ -4,6 +4,7 @@ function reduceFocus(timers, setTimers) {
   setTimers({
     ...timers,
     focus: newFocus,
+    current: newFocus * 60,
   });
 }
 
@@ -13,6 +14,7 @@ function increaseFocus(timers, setTimers) {
   setTimers({
     ...timers,
     focus: newFocus,
+    current: newFocus * 60,
   });
 }
 

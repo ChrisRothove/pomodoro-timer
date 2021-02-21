@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import classNames from "../utils/class-names";
-import { minutesToDuration } from "../utils/duration";
+import { minutesToDuration, secondsToDuration } from "../utils/duration";
 import useInterval from "../utils/useInterval";
 import FocusButtons from "./components/FocusButtons";
 import BreakButtons from "./components/BreakButtons";
@@ -15,14 +15,22 @@ function Pomodoro() {
   const initialTimerState = {
     focus: 25,
     break: 5,
-    current: 0,
+    current: 1500,
+    onBreak: false,
   };
 
   // Timer starts out paused
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [timers, setTimers] = useState(initialTimerState);
 
-  useInterval(() => {}, isTimerRunning ? 1000 : null);
+  useInterval(
+    () => {
+      setTimers({ ...timers, current: timers.current - 1 });
+      console.log(`current time: ${timers.current - 1}`);
+      if (timers.current <= 1) setIsTimerRunning(false);
+    },
+    isTimerRunning ? 1000 : null
+  );
 
   function playPause() {
     setIsTimerRunning((prevState) => !prevState);
@@ -50,8 +58,8 @@ function Pomodoro() {
                 Break Duration: {minutesToDuration(timers.break)}
               </span>
               <BreakButtons
-                increaseBreak={increaseBreak}
-                reduceBreak={reduceBreak}
+                increaseBreak={() => increaseBreak(timers, setTimers)}
+                reduceBreak={() => reduceBreak(timers, setTimers)}
               />
             </div>
           </div>
@@ -95,10 +103,12 @@ function Pomodoro() {
         <div className="row mb-2">
           <div className="col">
             {/* TODO: Update message below to include current session (Focusing or On Break) and total duration */}
-            <h2 data-testid="session-title">Focusing for 25:00 minutes</h2>
+            <h2 data-testid="session-title">
+              Focusing for {minutesToDuration(timers.focus)} minutes
+            </h2>
             {/* TODO: Update message below to include time remaining in the current session */}
             <p className="lead" data-testid="session-sub-title">
-              25:00 remaining
+              {secondsToDuration(timers.current)} remaining
             </p>
           </div>
         </div>
