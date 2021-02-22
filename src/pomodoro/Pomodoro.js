@@ -1,8 +1,8 @@
 import React, { useState } from "react";
+import sound from "./components/alarm/submarine-dive-horn.mp3";
 import classNames from "../utils/class-names";
 import { minutesToDuration } from "../utils/duration";
 import useInterval from "../utils/useInterval";
-import ariaPercentage from "../utils/aria-percentage";
 import FocusButtons from "./components/FocusButtons";
 import BreakButtons from "./components/BreakButtons";
 import TimerDisplay from "./components/TimerDisplay";
@@ -11,7 +11,8 @@ import {
   reduceBreak,
   increaseFocus,
   reduceFocus,
-} from "../utils/increase-and-reduce";
+  ariaPercentage,
+} from "../utils/custom-utils";
 
 function Pomodoro() {
   const initialTimerState = {
@@ -23,8 +24,10 @@ function Pomodoro() {
     isStopped: true,
   };
 
-  // Timer starts out paused
+  // Timer starts out stopped
   const [isTimerRunning, setIsTimerRunning] = useState(false);
+  // timers holds all state requirements initialized in
+  // the initial state variable
   const [timers, setTimers] = useState(initialTimerState);
 
   useInterval(
@@ -35,9 +38,13 @@ function Pomodoro() {
         ariaPercentage: ariaPercentage(timers),
       });
       if (timers.current <= 1) {
+        const audioToPlay = new Audio(
+          "./components/alarm/submarine-dive-horn.mp3"
+        );
+        audioToPlay.play();
         setTimers({
           ...timers,
-          current: timers.break * 60,
+          current: timers.onBreak ? timers.focus * 60 : timers.break * 60,
           onBreak: !timers.onBreak,
         });
       }
@@ -75,6 +82,7 @@ function Pomodoro() {
             <FocusButtons
               reduceFocus={() => reduceFocus(timers, setTimers)}
               increaseFocus={() => increaseFocus(timers, setTimers)}
+              timers={timers}
             />
           </div>
         </div>
@@ -87,6 +95,7 @@ function Pomodoro() {
               <BreakButtons
                 increaseBreak={() => increaseBreak(timers, setTimers)}
                 reduceBreak={() => reduceBreak(timers, setTimers)}
+                timers={timers}
               />
             </div>
           </div>

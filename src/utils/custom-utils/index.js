@@ -1,6 +1,6 @@
 function reduceFocus(timers, setTimers) {
   let newFocus = timers.focus - 5;
-  if (newFocus < 5) newFocus = 5;
+  if (newFocus < 1) newFocus = 1;
   setTimers({
     ...timers,
     focus: newFocus,
@@ -36,4 +36,24 @@ function increaseBreak(timers, setTimers) {
   });
 }
 
-export { increaseBreak, reduceBreak, increaseFocus, reduceFocus };
+function ariaPercentage(timers) {
+  if (timers.onBreak) {
+    const breakTime = timers.break * 60;
+    const percentage = timers.current / breakTime;
+    const wholePercentage = percentage * 100;
+    return 100 - wholePercentage;
+  } else {
+    const focusTime = timers.focus * 60;
+    const percentage = timers.current / focusTime;
+    const wholePercentage = percentage * 100;
+    return 100 - wholePercentage;
+  }
+}
+
+export {
+  increaseBreak,
+  reduceBreak,
+  increaseFocus,
+  reduceFocus,
+  ariaPercentage,
+};
