@@ -1,6 +1,6 @@
 function reduceFocus(timers, setTimers) {
   let newFocus = timers.focus - 5;
-  if (newFocus < 1) newFocus = 1;
+  if (newFocus < 5) newFocus = 5;
   setTimers({
     ...timers,
     focus: newFocus,

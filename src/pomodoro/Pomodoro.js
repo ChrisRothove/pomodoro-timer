@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import sound from "./components/alarm/submarine-dive-horn.mp3";
 import classNames from "../utils/class-names";
 import { minutesToDuration } from "../utils/duration";
 import useInterval from "../utils/useInterval";
@@ -38,10 +37,7 @@ function Pomodoro() {
         ariaPercentage: ariaPercentage(timers),
       });
       if (timers.current <= 1) {
-        const audioToPlay = new Audio(
-          "./components/alarm/submarine-dive-horn.mp3"
-        );
-        audioToPlay.play();
+        new Audio(`${process.env.PUBLIC_URL}/alarm/emergency001.mp3`).play();
         setTimers({
           ...timers,
           current: timers.onBreak ? timers.focus * 60 : timers.break * 60,
